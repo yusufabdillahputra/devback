@@ -32,6 +32,12 @@ class JSONWebToken
 
         try {
             $credential = JWT::decode($JWT, env('JWT_SECRET'), [env('JWT_ALGORITHM')]);
+            /**
+             * Query dibawah bisa diambil untuk kebutuhan data sesi login
+             */
+            $fetchUser = User::query()->where('USRNM', '=', $credential->user)->first();
+            $request->AuthSession = $fetchUser;
+            return $next($request);
         } catch (ExpiredException $expiredException) {
             return response()->json([
                 'status' => false,
@@ -43,15 +49,5 @@ class JSONWebToken
                 'message' => 'An error while decoding token.'
             ], 400);
         }
-
-        /**
-         * Query dibawah bisa diambil untuk kebutuhan data sesi login
-         */
-        $fetchUser = User::query()->where('USRNM', '=', $credential->user)->first();
-
-        $request->AuthSession = $fetchUser;
-
-        return $next($request);
-
     }
 }

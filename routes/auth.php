@@ -12,6 +12,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
 $router->post('/auth/login', [
     'as' => 'login',
     'uses' => 'Auth\AuthController@login'
