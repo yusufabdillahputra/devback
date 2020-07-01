@@ -13,7 +13,17 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->post('/auth/login', [
+    'as' => 'login',
+    'uses' => 'Auth\AuthController@login'
+]);
+
+$router->group([
+    'prefix' => 'auth',
+    'middleware' => 'JSONWebToken'
+], function () use ($router) {
+    $router->get('/', function () use ($router) {
+        return 'OK Sukses';
+    });
 });
 
